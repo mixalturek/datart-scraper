@@ -6,13 +6,51 @@
         "overview": {
             "title": "Overview",
             "transformation": {
-                "fields": ["title", "url"]
+                "fields": [
+                    "title",
+                    "brand",
+                    "category",
+                    "sku",
+                    "price",
+                    "rating",
+                    "ratingCount",
+                    "availability",
+                    "url"
+                ]
             },
             "display": {
                 "component": "table",
                 "properties": {
                     "title": {
-                        "label": "Title",
+                        "label": "Product Name",
+                        "format": "text"
+                    },
+                    "brand": {
+                        "label": "Brand",
+                        "format": "text"
+                    },
+                    "category": {
+                        "label": "Category",
+                        "format": "text"
+                    },
+                    "sku": {
+                        "label": "SKU",
+                        "format": "text"
+                    },
+                    "price": {
+                        "label": "Price (CZK)",
+                        "format": "number"
+                    },
+                    "rating": {
+                        "label": "Rating",
+                        "format": "number"
+                    },
+                    "ratingCount": {
+                        "label": "Reviews",
+                        "format": "number"
+                    },
+                    "availability": {
+                        "label": "Availability",
                         "format": "text"
                     },
                     "url": {

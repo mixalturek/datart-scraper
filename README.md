@@ -1,113 +1,123 @@
-# TypeScript Crawlee & CheerioCrawler Actor Template
+# Datart.cz Product Scraper
 
-<!-- This is an Apify template readme -->
+**Datart.cz Product Scraper** extracts structured product data — prices, specifications, images, ratings, and availability — from [datart.cz](https://www.datart.cz/), one of the largest Czech consumer electronics retailers. Start from the homepage to crawl the entire catalog, or point it at a single category page to scope your run.
 
-This template example was built with [Crawlee](https://crawlee.dev/) to scrape data from a website using [Cheerio](https://cheerio.js.org/) wrapped into [CheerioCrawler](https://crawlee.dev/api/cheerio-crawler/class/CheerioCrawler).
+Run it directly in [Apify Console](https://console.apify.com) — no coding required. Results are stored in a dataset you can export as JSON, CSV, or Excel and connect to any downstream system via the Apify API.
 
-## Quick Start
+## Why use Datart.cz Product Scraper?
 
-Once you've installed the dependencies, start the Actor:
+- **Price monitoring** — track price changes across product categories over time
+- **Competitor research** — collect structured product specs and pricing for analysis
+- **Catalog synchronization** — keep an external database in sync with live product data
+- **Market analysis** — aggregate ratings and availability across thousands of products
 
-```bash
-apify run
+## How to use Datart.cz Product Scraper
+
+1. Go to the Actor page on Apify Console and click **Try for free**.
+2. In the **Start URLs** field, enter one or more URLs:
+   - `https://www.datart.cz/` — crawl all categories and products
+   - `https://www.datart.cz/televize.html` — crawl only TVs
+   - `https://www.datart.cz/notebooky-a-it-technika.html` — crawl only laptops & IT
+3. Set **Max Requests per Crawl** to limit run size (200 = roughly 150–180 products).
+4. Click **Save & Run**.
+5. When finished, open the **Output** tab or download the dataset.
+
+## Input
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `startUrls` | array | URLs to start crawling from | `https://www.datart.cz/` |
+| `maxRequestsPerCrawl` | integer | Max pages fetched (0 = unlimited) | `200` |
+| `proxyConfiguration` | object | Proxy settings (Apify Proxy or custom) | disabled |
+
+**Example input:**
+```json
+{
+  "startUrls": [{ "url": "https://www.datart.cz/televize.html" }],
+  "maxRequestsPerCrawl": 500
+}
 ```
 
-Once your Actor is ready, you can push it to the Apify Console:
+## Output
 
-```bash
-apify login # first, you need to log in if you haven't already done so
+Each product is stored as one record in the default dataset. You can download the dataset in various formats such as JSON, HTML, CSV, or Excel.
 
-apify push
+**Example output item:**
+```json
+{
+  "url": "https://www.datart.cz/televize-samsung-qe50q7f",
+  "title": "Televize Samsung QE50Q7F",
+  "brand": "Samsung",
+  "category": "televize",
+  "sku": "SAMQE50Q7FA",
+  "internalId": "1915142",
+  "price": 9490,
+  "images": [
+    "https://image.datart.cz/foto/500/0/5/7/product_7421750.jpg"
+  ],
+  "rating": 4.8,
+  "ratingCount": 188,
+  "availability": "Ihned k odeslání",
+  "specifications": {
+    "Technologie displeje": "QLED",
+    "Úhlopříčka obrazovky": "125 cm (50\")",
+    "Rozlišení": "3840 x 2160 (Ultra HD 4K)"
+  },
+  "breadcrumbs": [
+    { "text": "TV, foto, audio, video", "url": "https://www.datart.cz/tv-audio-video" },
+    { "text": "Televize", "url": "https://www.datart.cz/televize.html" }
+  ],
+  "scrapedAt": "2026-06-17T10:00:00.000Z"
+}
 ```
 
-## Project Structure
+## Data table
 
-```text
-.actor/
-├── actor.json # Actor config: name, version, env vars, runtime settings
-├── dataset_schema.json # Structure and representation of data produced by an Actor
-├── input_schema.json # Input validation & Console form definition
-└── output_schema.json # Specifies where an Actor stores its output
-src/
-└── main.ts # Actor entry point and orchestrator
-storage/ # Local storage (mirrors Cloud during development)
-├── datasets/ # Output items (JSON objects)
-├── key_value_stores/ # Files, config, INPUT
-└── request_queues/ # Pending crawl requests
-Dockerfile # Container image definition
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| `url` | string | Canonical product URL |
+| `title` | string | Full product name |
+| `brand` | string | Brand name (extracted from title) |
+| `category` | string | URL-level category slug (e.g. `televize`) |
+| `sku` | string | Datart product code (`Kód:`) |
+| `internalId` | string | Datart internal ID (`ID:`) |
+| `price` | number | Price in CZK including VAT |
+| `images` | array | Product image URLs (500px size) |
+| `rating` | number | Average customer rating (0–5) |
+| `ratingCount` | number | Number of customer ratings |
+| `availability` | string | Stock/delivery status in Czech |
+| `specifications` | object | Technical specs as key/value pairs |
+| `breadcrumbs` | array | Navigation path objects `{text, url}` |
+| `scrapedAt` | string | ISO 8601 timestamp of when data was collected |
 
-For more information, see the [Actor definition](https://docs.apify.com/platform/actors/development/actor-definition) documentation.
+## Pricing / Cost estimation
 
-## How it works
+This Actor uses **CheerioCrawler** (HTTP-based, no browser) making it very fast and cost-efficient. Each page fetch consumes minimal compute units.
 
-This code is a TypeScript script that uses Cheerio to scrape data from a website. It then stores the website titles in a dataset.
+Approximate cost estimates on Apify platform:
+- **200 requests** (~150 products): ~$0.01–0.02
+- **5,000 requests** (~4,000 products): ~$0.20–0.40
+- **Full catalog crawl** (tens of thousands of products): ~$2–5
 
-- The crawler starts with URLs provided from the input `startUrls` field defined by the input schema. Number of scraped pages is limited by `maxPagesPerCrawl` field from the input schema.
-- The crawler uses `requestHandler` for each URL to extract the data from the page with the Cheerio library and to save the title and URL of each page to the dataset. It also logs out each result that is being saved.
+New Apify accounts include a free tier that typically covers hundreds of product scraping runs per month.
 
-## What's included
+## Tips
 
-- **[Apify SDK](https://docs.apify.com/sdk/js)** - toolkit for building [Actors](https://apify.com/actors)
-- **[Crawlee](https://crawlee.dev/)** - web scraping and browser automation library
-- **[Input schema](https://docs.apify.com/platform/actors/development/input-schema)** - define and easily validate a schema for your Actor's input
-- **[Dataset](https://docs.apify.com/sdk/python/docs/concepts/storages#working-with-datasets)** - store structured data where each object stored has the same attributes
-- **[Cheerio](https://cheerio.js.org/)** - a fast, flexible & elegant library for parsing and manipulating HTML and XML
-- **[Proxy configuration](https://docs.apify.com/platform/proxy)** - rotate IP addresses to prevent blocking
+- **Scope by category**: provide a specific category URL (e.g. `/notebooky-a-it-technika.html`) to focus the run and reduce cost.
+- **Large-scale runs**: enable Apify Proxy in the `proxyConfiguration` field to avoid IP-based rate limiting when crawling thousands of products.
+- **Scheduled monitoring**: use Apify's scheduler to run this Actor daily/weekly for price tracking.
+- **Filtering**: use `maxRequestsPerCrawl` during testing (e.g. 50) to preview results before a full run.
 
-## Resources
+## FAQ, disclaimers, and support
 
-- [Quick Start](https://docs.apify.com/platform/actors/development/quick-start) guide for building your first Actor
-- [Video tutorial](https://www.youtube.com/watch?v=yTRHomGg9uQ) on building a scraper using CheerioCrawler
-- [Written tutorial](https://docs.apify.com/academy/web-scraping-for-beginners/challenge) on building a scraper using CheerioCrawler
-- [Web scraping with Cheerio in 2023](https://blog.apify.com/web-scraping-with-cheerio/)
-- How to [scrape a dynamic page](https://blog.apify.com/what-is-a-dynamic-page/) using Cheerio
-- [Integration with Zapier](https://apify.com/integrations), Make, Google Drive and others
-- [Video guide on getting data using Apify API](https://www.youtube.com/watch?v=ViYYDHSBAKM)
+**Is it legal to scrape datart.cz?**
+This Actor collects only publicly available product information. Respect datart.cz's Terms of Service and robots.txt directives. Do not use the collected data for commercial redistribution without permission.
 
-## Creating Actors with templates
+**Some fields are null — why?**
+A few products may have non-standard page layouts. The scraper uses content-based selectors; a null value means the field wasn't found in the expected format on that page.
 
-[How to create Apify Actors with web scraping code templates](https://www.youtube.com/watch?v=u-i-Korzf8w)
+**Need a custom solution?**
+Contact [Apify](https://apify.com/contact) for enterprise-grade custom scrapers with SLA support.
 
-
-## Getting started
-
-For complete information [see this article](https://docs.apify.com/platform/actors/development#build-actor-locally). To run the Actor use the following command:
-
-```bash
-apify run
-```
-
-## Deploy to Apify
-
-### Connect Git repository to Apify
-
-If you've created a Git repository for the project, you can easily connect to Apify:
-
-1. Go to [Actor creation page](https://console.apify.com/actors/new)
-2. Click on **Link Git Repository** button
-
-### Push project on your local machine to Apify
-
-You can also deploy the project on your local machine to Apify without the need for the Git repository.
-
-1. Log in to Apify. You will need to provide your [Apify API Token](https://console.apify.com/account/integrations) to complete this action.
-
-    ```bash
-    apify login
-    ```
-
-2. Deploy your Actor. This command will deploy and build the Actor on the Apify Platform. You can find your newly created Actor under [Actors -> My Actors](https://console.apify.com/actors?tab=my).
-
-    ```bash
-    apify push
-    ```
-
-## Documentation reference
-
-To learn more about Apify and Actors, take a look at the following resources:
-
-- [Apify SDK for JavaScript documentation](https://docs.apify.com/sdk/js)
-- [Apify SDK for Python documentation](https://docs.apify.com/sdk/python)
-- [Apify Platform documentation](https://docs.apify.com/platform)
-- [Join our developer community on Discord](https://discord.com/invite/jyEM2PRvMU)
+**Found a bug or have feedback?**
+Open an issue in the [Issues tab](../../issues) on this Actor's page.

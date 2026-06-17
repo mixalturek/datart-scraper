@@ -1,25 +1,36 @@
 {
     "$schema": "https://apify.com/schemas/v1/input.ide.json",
-    "title": "CheerioCrawler Template",
+    "title": "Datart.cz Product Scraper",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
         "startUrls": {
             "title": "Start URLs",
             "type": "array",
-            "description": "URLs to start with.",
+            "description": "One or more datart.cz URLs to start from. Use the homepage to crawl everything, a category page (e.g. https://www.datart.cz/televize.html) to scope the run to one category, or a direct product URL.",
             "editor": "requestListSources",
             "prefill": [
                 {
-                    "url": "https://apify.com"
+                    "url": "https://www.datart.cz/"
                 }
             ]
         },
         "maxRequestsPerCrawl": {
             "title": "Max Requests per Crawl",
             "type": "integer",
-            "description": "Maximum number of requests that can be made by this crawler.",
-            "default": 100
+            "description": "Maximum number of pages (categories + products) the crawler may fetch. Set to 0 for unlimited.",
+            "default": 200,
+            "minimum": 0
+        },
+        "proxyConfiguration": {
+            "title": "Proxy Configuration",
+            "type": "object",
+            "description": "Proxy settings for avoiding IP blocks. Enable Apify Proxy for large-scale runs.",
+            "editor": "proxy",
+            "default": {
+                "useApifyProxy": false
+            }
         }
-    }
+    },
+    "required": ["startUrls"]
 }
