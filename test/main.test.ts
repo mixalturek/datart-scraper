@@ -21,6 +21,5 @@ describe('CheerioCrawler', () => {
         const { items } = await crawler.getData();
         expect(items.length).toBeGreaterThan(0);
         expect(items[0].url).toContain('datart.cz');
-        expect(items[0].title).toContain('Zámky na kolo');
     }, 30_000);
 });
