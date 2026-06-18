@@ -27,7 +27,7 @@ function isProductUrl(url: URL): boolean {
         return false;
     }
 
-    if (!pathname.includes('-') || !/^\/[a-z0-9-]+(\.html)?$/i.test(pathname)) {
+    if (!pathname.includes('-') || !/^(\/bazar)?\/[a-z0-9-]+(\.html)?$/i.test(pathname)) {
         return false;
     }
 
