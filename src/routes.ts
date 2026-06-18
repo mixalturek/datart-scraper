@@ -19,8 +19,7 @@ function isProductUrl(url: URL): boolean {
     if (DISALLOWED_PATHS.some((p) => pathname.startsWith(p))) return false;
     if (!pathname.includes('-') || !/^\/[a-z0-9-]+$/i.test(pathname)) return false;
     if (DISALLOWED_PARAMS.some((p) => searchParams.has(p))) return false;
-    // Product model numbers always contain digits (e.g. "qe50q7f", "oled55b56la")
-    if (!/\d/.test(pathname)) return false;
+
     return true;
 }
 
@@ -40,14 +39,18 @@ router.addHandler('CATEGORY', async ({ request, enqueueLinks, log }) => {
     log.info('Processing category page', { url: request.loadedUrl });
 
     await enqueueLinks({
-        selector: 'a[href]',
+        selector: '.product-box-list a[href]',
         transformRequestFunction: (req) => {
             try {
                 if (isProductUrl(new URL(req.url))) {
                     req.userData = { ...req.userData, label: 'PRODUCT' };
                     return req;
                 }
-            } catch { /* ignore invalid URLs */ }
+
+                log.info(`URL is not product: ${req.url}`);
+            } catch(e) {
+                log.warning("Exception while processing category page", {e});
+            }
             return false;
         },
     });
@@ -59,7 +62,9 @@ router.addHandler('CATEGORY', async ({ request, enqueueLinks, log }) => {
             try {
                 const u = new URL(req.url);
                 if (u.hostname === 'www.datart.cz' && u.pathname.endsWith('.html')) return req;
-            } catch { /* ignore */ }
+            } catch(e) {
+                log.warning('Exception while processing category page', { e });
+            }
             return false;
         },
     });
