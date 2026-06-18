@@ -1,7 +1,7 @@
 import { CheerioCrawler, purgeDefaultStorages } from '@crawlee/cheerio';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { router } from '../src/routes.js';
+import { labelStartUrls, router } from '../src/routes.js';
 
 describe('CheerioCrawler', () => {
     beforeAll(async () => {
@@ -14,13 +14,13 @@ describe('CheerioCrawler', () => {
             requestHandler: router,
         });
 
-        await crawler.run(['https://www.example.com']);
+        await crawler.run(labelStartUrls([{ url: 'https://www.datart.cz/zamky-na-kolo.html' }]));
 
         expect(crawler.stats.state.requestsFinished).toBeGreaterThanOrEqual(1);
 
         const { items } = await crawler.getData();
         expect(items.length).toBeGreaterThan(0);
-        expect(items[0].url).toContain('example.com');
-        expect(items[0].title).toContain('Example Domain');
+        expect(items[0].url).toContain('datart.cz');
+        expect(items[0].title).toContain('Zámky na kolo');
     }, 30_000);
 });

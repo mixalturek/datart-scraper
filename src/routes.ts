@@ -1,5 +1,7 @@
 import { createCheerioRouter } from '@crawlee/cheerio';
 
+export type StartUrl = { url: string; userData?: Record<string, unknown> };
+
 const DISALLOWED_PATHS = [
     '/kosik',
     '/rezervace',
@@ -11,6 +13,30 @@ const DISALLOWED_PATHS = [
 ];
 
 const DISALLOWED_PARAMS = ['tab', 'listType', 'mobile', 'desktop', 'uiShowFilter', 'orderBY', 'do'];
+
+/**
+ * Label start URLs so the router can handle them correctly:
+ */
+export function labelStartUrls(urls: StartUrl[]): StartUrl[] {
+    return urls.map((urlDef) => {
+        try {
+            const parsedUrl = new URL(urlDef.url);
+
+            if (isProductUrl(parsedUrl)) {
+                return { ...urlDef, userData: { ...urlDef.userData, label: 'PRODUCT' } };
+            }
+
+            if (parsedUrl.pathname !== '/') {
+                return { ...urlDef, userData: { ...urlDef.userData, label: 'CATEGORY' } };
+            }
+        } catch {
+            /* invalid URL, let default handler deal with it */
+        }
+
+        // Everything else (homepage) → default handler
+        return urlDef;
+    });
+}
 
 function isProductUrl(url: URL): boolean {
     if (url.hostname !== 'www.datart.cz') {
