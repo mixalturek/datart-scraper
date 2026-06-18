@@ -22,10 +22,6 @@ export function labelStartUrls(urls: StartUrl[]): StartUrl[] {
         try {
             const parsedUrl = new URL(urlDef.url);
 
-            if (isProductUrl(parsedUrl)) {
-                return { ...urlDef, userData: { ...urlDef.userData, label: 'PRODUCT' } };
-            }
-
             if (parsedUrl.pathname !== '/') {
                 return { ...urlDef, userData: { ...urlDef.userData, label: 'CATEGORY' } };
             }
