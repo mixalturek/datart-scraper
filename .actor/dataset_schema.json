@@ -6,17 +6,7 @@
         "overview": {
             "title": "Overview",
             "transformation": {
-                "fields": [
-                    "title",
-                    "brand",
-                    "category",
-                    "sku",
-                    "price",
-                    "rating",
-                    "ratingCount",
-                    "availability",
-                    "url"
-                ]
+                "fields": ["title", "brand", "category", "sku", "price", "rating", "ratingCount", "availability", "url"]
             },
             "display": {
                 "component": "table",

@@ -89,8 +89,8 @@ router.addHandler('CATEGORY', async ({ request, enqueueLinks, log }) => {
                 }
 
                 log.info(`URL is not product: ${req.url}`);
-            } catch(e) {
-                log.warning("Exception while processing category page", {e});
+            } catch (e) {
+                log.warning('Exception while processing category page', { e });
             }
             return false;
         },
@@ -103,7 +103,7 @@ router.addHandler('CATEGORY', async ({ request, enqueueLinks, log }) => {
             try {
                 const u = new URL(req.url);
                 if (u.hostname === 'www.datart.cz' && u.pathname.endsWith('.html')) return req;
-            } catch(e) {
+            } catch (e) {
                 log.warning('Exception while processing category page', { e });
             }
             return false;
@@ -150,13 +150,18 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
     // Rating — link to "#recenze" contains "4.8 (188)"
     let rating: number | null = null;
     let ratingCount: number | null = null;
-    $('a[href*="#recenze"]').first().each((_, el) => {
-        const match = $(el).text().trim().match(/([\d,.]+)\s*\((\d+)\)/);
-        if (match) {
-            rating = parseFloat(match[1].replace(',', '.'));
-            ratingCount = parseInt(match[2], 10);
-        }
-    });
+    $('a[href*="#recenze"]')
+        .first()
+        .each((_, el) => {
+            const match = $(el)
+                .text()
+                .trim()
+                .match(/([\d,.]+)\s*\((\d+)\)/);
+            if (match) {
+                rating = parseFloat(match[1].replace(',', '.'));
+                ratingCount = parseInt(match[2], 10);
+            }
+        });
 
     // Availability status
     const availMatch = bodyText.match(/(Ihned k odeslání|Skladem v \d+ prodejnách|Není skladem)/);
@@ -173,13 +178,11 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
 
     // Breadcrumbs
     const breadcrumbs: { text: string; url: string }[] = [];
-    $('[class*="breadcrumb"] a, nav[aria-label*="breadcrumb"] a, [itemtype*="BreadcrumbList"] a').each(
-        (_, el) => {
-            const text = $(el).text().trim();
-            const href = $(el).attr('href');
-            if (text && href) breadcrumbs.push({ text, url: new URL(href, url).toString() });
-        },
-    );
+    $('[class*="breadcrumb"] a, nav[aria-label*="breadcrumb"] a, [itemtype*="BreadcrumbList"] a').each((_, el) => {
+        const text = $(el).text().trim();
+        const href = $(el).attr('href');
+        if (text && href) breadcrumbs.push({ text, url: new URL(href, url).toString() });
+    });
 
     await pushData({
         url,
