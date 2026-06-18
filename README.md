@@ -47,7 +47,6 @@ Each product is stored as one record in the default dataset. You can download th
 {
   "url": "https://www.datart.cz/televize-samsung-qe50q7f",
   "title": "Televize Samsung QE50Q7F",
-  "brand": "Samsung",
   "category": "televize",
   "sku": "SAMQE50Q7FA",
   "internalId": "1915142",
@@ -77,8 +76,6 @@ Each product is stored as one record in the default dataset. You can download th
 |-------|------|-------------|
 | `url` | string | Canonical product URL |
 | `title` | string | Full product name |
-| `brand` | string | Brand name (extracted from title) |
-| `category` | string | URL-level category slug (e.g. `televize`) |
 | `sku` | string | Datart product code (`Kód:`) |
 | `internalId` | string | Datart internal ID (`ID:`) |
 | `price` | number | Price in CZK including VAT |
