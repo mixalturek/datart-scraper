@@ -1,19 +1,19 @@
 {
-	"$schema": "https://apify.com/schemas/v1/actor.ide.json",
-	"actorSpecification": 1,
-	"name": "datart-scraper",
-	"title": "Datart.cz Product Scraper",
-	"description": "Scrapes product details (name, price, specs, images, availability) from datart.cz",
-	"version": "0.0",
-	"buildTag": "latest",
-	"meta": {
-		"templateId": "ts-crawlee-cheerio",
-		"generatedBy": "Claude Code with Claude Sonnet 4.6"
-	},
-	"input": "./input_schema.json",
-	"output": "./output_schema.json",
-	"storages": {
-		"dataset": "./dataset_schema.json"
-	},
-	"dockerfile": "../Dockerfile"
+    "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+    "actorSpecification": 1,
+    "name": "datart-scraper",
+    "title": "Datart.cz Product Scraper",
+    "description": "Scrapes product details (name, price, specs, images, availability) from datart.cz",
+    "version": "0.0",
+    "buildTag": "latest",
+    "meta": {
+        "templateId": "ts-crawlee-cheerio",
+        "generatedBy": "Claude Code with Claude Sonnet 4.6"
+    },
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
 }
