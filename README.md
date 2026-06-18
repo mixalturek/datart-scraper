@@ -18,9 +18,10 @@ Run it directly in [Apify Console](https://console.apify.com) — no coding requ
     - `https://www.datart.cz/` — crawl all categories and products
     - `https://www.datart.cz/televize.html` — crawl only TVs
     - `https://www.datart.cz/notebooky-a-it-technika.html` — crawl only laptops & IT
-3. Set **Max Requests per Crawl** to limit run size (200 = roughly 150–180 products).
-4. Click **Save & Run**.
-5. When finished, open the **Output** tab or download the dataset.
+3. Optional: Enable residential proxy and configure the country to "Czech Republic". If you get no results, this might be the root cause.
+4. Set **Max Requests per Crawl** to limit run size (200 = roughly 150–180 products).
+5. Click **Save & Run**.
+6. When finished, open the **Output** tab or download the dataset.
 
 ## Input
 
