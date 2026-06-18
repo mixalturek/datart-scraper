@@ -13,12 +13,27 @@ const DISALLOWED_PATHS = [
 const DISALLOWED_PARAMS = ['tab', 'listType', 'mobile', 'desktop', 'uiShowFilter', 'orderBY', 'do'];
 
 function isProductUrl(url: URL): boolean {
-    if (url.hostname !== 'www.datart.cz') return false;
+    if (url.hostname !== 'www.datart.cz') {
+        return false;
+    }
+
     const { pathname, searchParams } = url;
-    if (pathname === '/' || pathname.endsWith('.html')) return false;
-    if (DISALLOWED_PATHS.some((p) => pathname.startsWith(p))) return false;
-    if (!pathname.includes('-') || !/^\/[a-z0-9-]+$/i.test(pathname)) return false;
-    if (DISALLOWED_PARAMS.some((p) => searchParams.has(p))) return false;
+
+    if (pathname === '/') {
+        return false;
+    }
+
+    if (DISALLOWED_PATHS.some((p) => pathname.startsWith(p))) {
+        return false;
+    }
+
+    if (!pathname.includes('-') || !/^\/[a-z0-9-]+(\.html)?$/i.test(pathname)) {
+        return false;
+    }
+
+    if (DISALLOWED_PARAMS.some((p) => searchParams.has(p))) {
+        return false;
+    }
 
     return true;
 }
@@ -140,16 +155,9 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
         },
     );
 
-    // Category from URL path, brand from product title
-    const urlPath = new URL(url).pathname.slice(1);
-    const category = urlPath.split('-')[0] ?? null;
-    const titleParts = title.split(/\s+/);
-    const brand = titleParts.length >= 2 ? titleParts[1] : null;
-
     await pushData({
         url,
         title,
-        brand,
         sku,
         internalId,
         price,
@@ -159,7 +167,6 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
         availability,
         specifications,
         breadcrumbs,
-        category,
         scrapedAt: new Date().toISOString(),
     });
 
