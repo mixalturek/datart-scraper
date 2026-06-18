@@ -11,6 +11,10 @@ Run it directly in [Apify Console](https://console.apify.com) — no coding requ
 - **Catalog synchronization** — keep an external database in sync with live product data
 - **Market analysis** — aggregate ratings and availability across thousands of products
 
+## ⚠️ Important
+
+This scraper requires a proxy (Apify Proxy is recommended). Running without a proxy will very likely result in no results, as Datart actively blocks requests from non-proxied or datacenter IPs.
+
 ## How to use Datart.cz Product Scraper
 
 1. Go to the Actor page on Apify Console and click **Try for free**.

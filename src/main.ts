@@ -23,7 +23,7 @@ Actor.on('aborting', async () => {
 });
 
 const {
-    startUrls = [{ url: 'https://www.datart.cz/' }],
+    startUrls = [{ url: 'https://www.datart.cz/televize.html' }],
     maxRequestsPerCrawl = 200,
     proxyConfiguration: proxyConfig,
 } = (await Actor.getInput<Input>()) ?? ({} as Input);

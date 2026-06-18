@@ -7,11 +7,11 @@
         "startUrls": {
             "title": "Start URLs",
             "type": "array",
-            "description": "One or more datart.cz URLs to start from. Use the homepage to crawl everything, a category page (e.g. https://www.datart.cz/televize.html) to scope the run to one category, or a direct product URL.",
+            "description": "One or more datart.cz URLs to start from. Use the homepage to crawl everything or a category page (e.g. https://www.datart.cz/televize.html) to scope the run to one category.",
             "editor": "requestListSources",
             "prefill": [
                 {
-                    "url": "https://www.datart.cz/"
+                    "url": "https://www.datart.cz/televize.html"
                 }
             ]
         },
@@ -28,7 +28,9 @@
             "description": "Proxy settings for avoiding IP blocks. Enable Apify Proxy for large-scale runs.",
             "editor": "proxy",
             "default": {
-                "useApifyProxy": false
+                "useApifyProxy": true,
+                "apifyProxyGroups": ["RESIDENTIAL"],
+                "apifyProxyCountry": "CZ"
             }
         }
     },
