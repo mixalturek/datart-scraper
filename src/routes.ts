@@ -160,7 +160,10 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
         });
 
     // Availability status
-    const availability = $('.product-availability-state').text();
+    const availMatch = bodyText.match(
+        /(Ihned k odeslání|Skladem v \d+ prodejnách|Není skladem|U dodavatele|K vyzvednutí v prodejně|Očekáváme do)/,
+    );
+    const availability = availMatch?.[1] ?? null;
 
     // Specifications — table with th[scope="row"] for name, td for value
     const specifications: Record<string, string> = {};
