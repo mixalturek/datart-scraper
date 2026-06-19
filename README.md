@@ -15,7 +15,7 @@ Run it directly in [Apify Console](https://console.apify.com) — no coding requ
 
 This scraper requires a proxy (Apify Proxy is recommended). Running without a proxy will very likely result in no results, as Datart actively blocks requests from non-proxied or datacenter IPs.
 
-## How to use Datart.cz Product Scraper
+## How to use Datart.cz Product Scraper in standard mode
 
 1. Go to the Actor page on Apify Console and click **Try for free**.
 2. In the **Start URLs** field, enter one or more URLs:
@@ -91,6 +91,11 @@ Each product is stored as one record in the default dataset. You can download th
 | `specifications` | object | Technical specs as key/value pairs            |
 | `breadcrumbs`    | array  | Navigation path objects `{text, url}`         |
 | `scrapedAt`      | string | ISO 8601 timestamp of when data was collected |
+
+## Standby mode
+
+The actor can be started also in the Standby mode. The inner HTTP server then accepts `GET /scrape-product?url=<productUrl>` requests and returns
+scraped product data synchronously. When enabled, no batch crawl is run — the actor simply waits for incoming requests.
 
 ## Pricing / Cost estimation
 

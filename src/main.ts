@@ -10,7 +10,6 @@ import { scrapeProductUrl } from './scrape.js';
 interface Input {
     startUrls?: StartUrl[];
     maxRequestsPerCrawl?: number;
-    enableStandby?: boolean;
     proxyConfiguration?: {
         useApifyProxy?: boolean;
         apifyProxyGroups?: string[];
@@ -28,11 +27,11 @@ Actor.on('aborting', async () => {
 const {
     startUrls,
     maxRequestsPerCrawl = 200,
-    enableStandby = false,
     proxyConfiguration: proxyConfig,
 } = (await Actor.getInput<Input>()) ?? ({} as Input);
 
 const proxyConfiguration = proxyConfig?.useApifyProxy ? await Actor.createProxyConfiguration(proxyConfig) : undefined;
+const enableStandby = Actor.config.get('metaOrigin') === 'STANDBY';
 
 if (enableStandby) {
     const port = Number(process.env.ACTOR_WEB_SERVER_PORT) || 4321;
