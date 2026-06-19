@@ -32,7 +32,13 @@
                 "apifyProxyGroups": ["RESIDENTIAL"],
                 "apifyProxyCountry": "CZ"
             }
+        },
+        "enableStandby": {
+            "title": "Enable Standby Mode",
+            "type": "boolean",
+            "description": "Start an HTTP server that accepts GET /scrape-product?url=<productUrl> requests and returns scraped product data synchronously. When enabled without startUrls, no batch crawl is run — the actor simply waits for incoming requests.",
+            "default": false
         }
     },
-    "required": ["startUrls"]
+    "required": []
 }
