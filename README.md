@@ -97,6 +97,8 @@ Each product is stored as one record in the default dataset. You can download th
 The actor can be started also in the Standby mode. The inner HTTP server then accepts `GET /scrape-product?url=<productUrl>` requests and returns
 scraped product data synchronously. When enabled, no batch crawl is run — the actor simply waits for incoming requests.
 
+Each successful scrape and response is charged using `apify-default-dataset-item` event.
+
 ## Pricing / Cost estimation
 
 This Actor uses **CheerioCrawler** (HTTP-based, no browser) making it very fast and cost-efficient. Each page fetch consumes minimal compute units.

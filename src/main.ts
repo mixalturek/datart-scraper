@@ -78,6 +78,7 @@ if (enableStandby) {
                 const data = await scrapeProductUrl(url, proxyConfiguration);
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(data));
+                await Actor.charge({ eventName: 'apify-default-dataset-item', count: 1 });
             } catch (err) {
                 log.exception(err as Error, 'Standby scrape failed', { url });
                 res.writeHead(500, { 'Content-Type': 'application/json' });
