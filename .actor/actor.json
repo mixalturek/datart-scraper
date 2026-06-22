@@ -16,5 +16,6 @@
         "dataset": "./dataset_schema.json"
     },
     "dockerfile": "../Dockerfile",
-    "usesStandbyMode": true
+    "usesStandbyMode": true,
+    "webServerSchema": "./openapi.json"
 }

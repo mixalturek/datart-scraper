@@ -1,0 +1,184 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Datart.cz Product Scraper — Standby API",
+        "version": "0.0",
+        "description": "Scrapes product details from datart.cz on demand. The Actor must be running in standby mode."
+    },
+    "paths": {
+        "/scrape-product": {
+            "get": {
+                "summary": "Scrape a product from datart.cz",
+                "description": "Fetches and extracts product details (title, price, images, specs, availability, …) from a single datart.cz product page. Charges one dataset-item credit per successful scrape.",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "query",
+                        "required": true,
+                        "description": "Full URL of the datart.cz product page to scrape (must be on www.datart.cz and point to an individual product).",
+                        "schema": {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "https://www.datart.cz/pracka-lg-f2x50s9tkb-bila"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully scraped product data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductData"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request — missing or malformed `url` parameter, or the URL does not point to a Datart product page",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "missingUrl": {
+                                        "summary": "Missing query parameter",
+                                        "value": { "error": "Missing query parameter: url" }
+                                    },
+                                    "invalidUrl": {
+                                        "summary": "Malformed URL",
+                                        "value": { "error": "Invalid URL" }
+                                    },
+                                    "notProduct": {
+                                        "summary": "Not a product URL",
+                                        "value": { "error": "URL is not a valid Datart product URL" }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Scraping failed due to an unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScrapingErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ProductData": {
+                "type": "object",
+                "required": ["url", "title", "images", "specifications", "breadcrumbs", "scrapedAt"],
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Canonical URL of the scraped product page"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Product name (from the first H1 on the page)"
+                    },
+                    "sku": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Retailer product code (\"Kód\")"
+                    },
+                    "internalId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Datart internal numeric ID (\"ID\")"
+                    },
+                    "price": {
+                        "type": "number",
+                        "nullable": true,
+                        "description": "Price including VAT in CZK"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "description": "Product image URLs"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "nullable": true,
+                        "description": "Average customer rating"
+                    },
+                    "ratingCount": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "Number of customer reviews"
+                    },
+                    "availability": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Stock availability label (e.g. \"Ihned k odeslání\", \"Není skladem\")"
+                    },
+                    "specifications": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "Technical specifications as key-value pairs"
+                    },
+                    "breadcrumbs": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["text", "url"],
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        },
+                        "description": "Navigation breadcrumb trail"
+                    },
+                    "scrapedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "ISO 8601 timestamp of when the data was scraped"
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "required": ["error"],
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ScrapingErrorResponse": {
+                "type": "object",
+                "required": ["error"],
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "Scraping failed"
+                    },
+                    "details": {
+                        "type": "string",
+                        "description": "Underlying error message"
+                    }
+                }
+            }
+        }
+    }
+}
