@@ -1,4 +1,4 @@
-import type { CheerioCrawlingContext } from '@crawlee/cheerio';
+import type { CheerioCrawlingContext, Log } from '@crawlee/cheerio';
 
 type CheerioAPI = CheerioCrawlingContext['$'];
 
@@ -17,7 +17,8 @@ export interface ProductData {
     scrapedAt: string;
 }
 
-export function extractProduct(url: string, $: CheerioAPI): ProductData {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function extractProduct(url: string, $: CheerioAPI, log: Log): ProductData {
     const title = $('h1').first().text().trim();
     const bodyText = $('body').text();
 
