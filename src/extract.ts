@@ -17,8 +17,7 @@ export interface ProductData {
     scrapedAt: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function extractProduct(url: string, $: CheerioAPI, log: Log): ProductData {
+export function extractProduct(url: string, $: CheerioAPI): ProductData {
     const title = $('h1').first().text().trim();
     const bodyText = $('body').text();
 

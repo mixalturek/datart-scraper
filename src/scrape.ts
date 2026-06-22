@@ -10,9 +10,9 @@ export async function scrapeProductUrl(url: string, proxyConfiguration?: ProxyCo
     const crawler = new CheerioCrawler({
         proxyConfiguration,
         maxRequestsPerCrawl: 1,
-        requestHandler: async ({ request, $, log }) => {
+        requestHandler: async ({ request, $ }) => {
             try {
-                result = extractProduct(request.loadedUrl ?? request.url, $, log);
+                result = extractProduct(request.loadedUrl ?? request.url, $);
             } catch (e) {
                 errorResult = e as Error;
             }

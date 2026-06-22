@@ -114,7 +114,7 @@ router.addHandler('PRODUCT', async ({ request, $, pushData, log }) => {
     const url = request.loadedUrl ?? request.url;
     log.info('Processing product', { url });
 
-    const data = extractProduct(url, $, log);
+    const data = extractProduct(url, $);
     await pushData(data);
 
     log.info('Scraped product', { url });
