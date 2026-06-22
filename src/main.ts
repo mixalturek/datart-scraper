@@ -77,9 +77,18 @@ if (enableStandby) {
             try {
                 log.info('Standby scraping product', { url });
                 const data = await scrapeProductUrl(url, proxyConfiguration);
+
+                const { eventChargeLimitReached } = await Actor.charge({ eventName: 'scraped-product' });
+                if (eventChargeLimitReached) {
+                    log.info('Charge limit reached', { url });
+                    res.writeHead(402, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Charge limit reached' }));
+                    await Actor.exit();
+                    return;
+                }
+
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(data));
-                // await Actor.charge({ eventName: 'apify-default-dataset-item', count: 1 });
                 log.info('Standby scraped product', { url });
             } catch (err) {
                 log.exception(err as Error, 'Standby scrape failed', { url });
