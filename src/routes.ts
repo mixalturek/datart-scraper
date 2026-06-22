@@ -86,7 +86,7 @@ router.addHandler('CATEGORY', async ({ request, enqueueLinks, log }) => {
                     return req;
                 }
 
-                log.info('Skipping, not a product', {url: req.url});
+                log.info('Skipping, not a product', { url: req.url });
             } catch (e) {
                 log.warning('Exception while processing category page', { e });
             }

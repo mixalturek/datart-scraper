@@ -21,6 +21,10 @@ export function extractProduct(url: string, $: CheerioAPI): ProductData {
     const title = $('h1').first().text().trim();
     const bodyText = $('body').text();
 
+    if (bodyText.trim().length === 0) {
+        throw new Error(`Failed to scrape product, empty response body, is residential proxy enabled?`);
+    }
+
     const priceMatch = bodyText.match(/Cena s DPH:\s*([\d\s]+)\s*Kč/);
     const price = priceMatch ? parseInt(priceMatch[1].replace(/\s/g, ''), 10) : null;
 

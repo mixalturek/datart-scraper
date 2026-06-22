@@ -5,16 +5,25 @@ import { extractProduct, type ProductData } from './extract.js';
 
 export async function scrapeProductUrl(url: string, proxyConfiguration?: ProxyConfiguration): Promise<ProductData> {
     let result: ProductData | undefined;
+    let errorResult: Error | undefined;
 
     const crawler = new CheerioCrawler({
         proxyConfiguration,
         maxRequestsPerCrawl: 1,
         requestHandler: async ({ request, $ }) => {
-            result = extractProduct(request.loadedUrl ?? request.url, $);
+            try {
+                result = extractProduct(request.loadedUrl ?? request.url, $);
+            } catch (e) {
+                errorResult = e as Error;
+            }
         },
     });
 
     await crawler.run([{ url }]);
+
+    if (!errorResult) {
+        throw errorResult;
+    }
 
     if (!result) {
         throw new Error(`Failed to scrape product: ${url}`);
