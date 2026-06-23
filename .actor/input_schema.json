@@ -7,11 +7,11 @@
         "startUrls": {
             "title": "Start URLs",
             "type": "array",
-            "description": "One or more datart.cz URLs to start from. Use the homepage to crawl everything or a category page (e.g. https://www.datart.cz/televize.html) to scope the run to one category.",
+            "description": "One or more datart.cz URLs to start from. Use the homepage to crawl everything or a category page (e.g. https://www.datart.cz/zamky-na-kolo.html) to scope the run to one category.",
             "editor": "requestListSources",
             "prefill": [
                 {
-                    "url": "https://www.datart.cz/televize.html"
+                    "url": "https://www.datart.cz/zamky-na-kolo.html"
                 }
             ]
         },
