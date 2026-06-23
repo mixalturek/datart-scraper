@@ -65,7 +65,7 @@ export function extractProduct(url: string, $: CheerioAPI): ProductData {
         });
 
     const availMatch = bodyText.match(
-        /(Ihned k odeslání|Skladem v \d+ prodejnách|Není skladem|U dodavatele|K vyzvednutí v prodejně|Očekáváme do)/,
+        /(Ihned k odeslání|Skladem v \d+ prodejnách|Není skladem|U dodavatele|K vyzvednutí v prodejně|Očekáváme do|Poslední kus k odeslání)/,
     );
     const availability = availMatch?.[1] ?? null;
 
