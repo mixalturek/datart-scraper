@@ -5,7 +5,7 @@ import { CheerioCrawler } from '@crawlee/cheerio';
 import { Actor, log } from 'apify';
 
 import { isProductUrl, labelStartUrls, router, type StartUrl } from './routes.js';
-import { scrapeProductUrl } from './scrape.js';
+import { initStandbyCrawler, scrapeProductUrl, teardownStandbyCrawler } from './scrape.js';
 
 interface Input {
     startUrls?: StartUrl[];
@@ -20,6 +20,7 @@ interface Input {
 await Actor.init();
 
 Actor.on('aborting', async () => {
+    await teardownStandbyCrawler();
     await setTimeout(1000);
     await Actor.exit();
 });
@@ -34,6 +35,8 @@ const proxyConfiguration = proxyConfig?.useApifyProxy ? await Actor.createProxyC
 const enableStandby = Actor.config.get('metaOrigin') === 'STANDBY';
 
 if (enableStandby) {
+    await initStandbyCrawler(proxyConfiguration);
+
     const port = Number(process.env.ACTOR_WEB_SERVER_PORT) || 4321;
 
     const server = http.createServer(async (req, res) => {
@@ -76,13 +79,14 @@ if (enableStandby) {
 
             try {
                 log.info('Standby scraping product', { url });
-                const data = await scrapeProductUrl(url, proxyConfiguration);
+                const data = await scrapeProductUrl(url);
 
                 const { eventChargeLimitReached } = await Actor.charge({ eventName: 'scraped-product' });
                 if (eventChargeLimitReached) {
                     log.info('Charge limit reached', { url });
                     res.writeHead(402, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ error: 'Charge limit reached' }));
+                    await teardownStandbyCrawler();
                     await Actor.exit();
                     return;
                 }
