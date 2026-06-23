@@ -111,7 +111,7 @@ if (enableStandby) {
     });
 }
 
-const urlsToScrape = startUrls ?? (enableStandby ? [] : [{ url: 'https://www.datart.cz/televize.html' }]);
+const urlsToScrape = startUrls ?? (enableStandby ? [] : [{ url: 'https://www.datart.cz/zamky-na-kolo.html' }]);
 
 if (urlsToScrape.length > 0) {
     const crawler = new CheerioCrawler({
