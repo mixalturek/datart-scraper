@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import { CheerioCrawler } from '@crawlee/cheerio';
 import type { ProxyConfiguration } from 'apify';
 
@@ -19,7 +21,7 @@ export async function scrapeProductUrl(url: string, proxyConfiguration?: ProxyCo
         },
     });
 
-    await crawler.run([{ url }]);
+    await crawler.run([{ url, uniqueKey: randomUUID() }]);
 
     if (errorResult !== undefined) {
         throw errorResult;
